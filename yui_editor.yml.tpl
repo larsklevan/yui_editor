@@ -3,6 +3,7 @@ selector: rich_text_editor
 simple_editor: false
 body_class: yui-skin-sam
 editor_extension_callbacks: "// MyExtension.install(editor);"
+javascript_base_uri: //yui.yahooapis.com
 editor_extension_javascripts:
   # - 
   #   extension.js
