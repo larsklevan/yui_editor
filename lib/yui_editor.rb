@@ -1,10 +1,10 @@
-
-module YUIEditor
-  mattr_accessor :default_config
+module YuiEditor
+  mattr_accessor :default_options
+  BUTTONS = %w{fontname fontsize bold italic underline subscript superscript forecolor backcolor removeformat hiddenelements justifyleft justifycenter justifyright justifyfull heading indent outdent insertunorderedlist insertorderedlist createlink insertimage}
 
   module ClassMethods
     def uses_yui_editor(options = {})
-      yui_editor_options = options.delete(:options)
+      yui_editor_options = options.delete(:editor)
       proc = Proc.new do |c|
         c.instance_variable_set(:@yui_editor_options, yui_editor_options)
         c.instance_variable_set(:@uses_yui_editor, true)
@@ -14,55 +14,52 @@ module YUIEditor
   end
 
   def self.included(base)
-    if YUIEditor.default_config.nil?
+    if YuiEditor.default_options.nil?
       config_file = File.join(RAILS_ROOT, 'config', 'yui_editor.yml')
-      YUIEditor.default_config = File.readable?(config_file) ? YAML.load_file(config_file).symbolize_keys : {}  
+      YuiEditor.default_options = File.readable?(config_file) ? YAML.load_file(config_file).symbolize_keys : {}  
     end
 
     base.extend(ClassMethods)
-    base.helper YUIEditorHelper
+    base.helper YuiEditorHelper
   end
 
-  module YUIEditorHelper
-    attr_accessor :yui_default_options
-
+  module YuiEditorHelper
     def using_yui_editor?
       !@using_yui_editor.nil?
     end
 
-    def yui_editor_init(options = @yui_editor_options)
-      options ||= {}
-      version = options[:version] || '2.5.2'
+    def yui_editor_init
+      options = YuiEditor.default_options.merge(@yui_editor_options || {})
 
+      version = options.delete(:version) || '2.5.2'
       editor_selector = options.delete(:selector) || 'rich_text_editor'
-      editor_class = options.delete(:editor_class) || 'Editor' #other valid option is SimpleEditor
+      editor_class = options.delete(:simple_editor) ? 'SimpleEditor' : 'Editor'
+      callbacks = (options.delete(:callbacks) || '')
+      body_class = options.delete(:body_class) || 'yui-skin-sam'
 
       compression = RAILS_ENV == 'development' ? '' : '-min'
 
       result = ''
-      result << stylesheet_link_tag("//yui.yahooapis.com/#{version}/build/assets/skins/sam/skin.css") + "\n"
-
+      result << stylesheet_link_tag("//yui.yahooapis.com/#{version}/build/assets/skins/sam/skin.css") + "\n" if body_class == 'yui-skin-sam'
+      
       result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/yahoo-dom-event/yahoo-dom-event.js") + "\n"
-      result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/element/element-beta#{compression}.js") + "\n"
-      result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/container/container_core#{compression}.js") + "\n"
-      result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/menu/menu#{compression}.js") + "\n"
-      result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/button/button#{compression}.js") + "\n"
-      result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/editor/editor-beta#{compression}.js") + "\n"
-      result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/connection/connection#{compression}.js") + "\n"
+      %w{element/element-beta container/container_core menu/menu button/button editor/editor-beta connection/connection}.each do |script|
+        result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/#{script}#{compression}.js") + "\n"
+      end
 
       js = <<JAVASCRIPT
+var debug = null;
 YAHOO.util.Event.onDOMReady(function(){
-  new YAHOO.util.Element(document.getElementsByTagName('body')[0]).addClass('yui-skin-sam');
+  new YAHOO.util.Element(document.getElementsByTagName('body')[0]).addClass('#{body_class}');
   
   var textAreas = document.getElementsByTagName('textarea');
   for (var i=0; i<textAreas.length; i++) {
     var textArea = textAreas[i];
     if (new YAHOO.util.Element(textArea).hasClass('#{editor_selector}')) {
-      var editor = new YAHOO.widget.#{editor_class}(textArea.id,{
-        handleSubmit: true
-      });
-      //callbacks?
+      var editor = new YAHOO.widget.#{editor_class}(textArea.id,#{options[:editor_config_javascript] || '{}'});
+      #{callbacks};
       editor.render();
+      debug = editor;
     }
   }
 });
@@ -82,5 +79,5 @@ JAVASCRIPT
   end
 end
 
-ActionController::Base.send(:include, YUIEditor)
-ActionView::Base.send :include, YUIEditor::YUIEditorHelper
+ActionController::Base.send(:include, YuiEditor)
+ActionView::Base.send :include, YuiEditor::YuiEditorHelper

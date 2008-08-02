@@ -29,9 +29,7 @@ blogs.html.erb:
 # Customized config
 
 class BlogController < ApplicationController
-  uses_yui_editor(:only => [:new, :create, :edit, :update], :editor => {:custom_layout => :blog, :selector => 'rich_text_area', :version => '2.5.1'})
+  uses_yui_editor(:only => [:new, :create, :edit, :update], :selector => 'rich_text_area', :version => '2.5.1', :callbacks => 'new YuiImageUploader(editor), :editor_config_javascript => "autoHeight: true")
 end
-
-
 
 Copyright (c) 2008 Lars Klevan, released under the MIT license
