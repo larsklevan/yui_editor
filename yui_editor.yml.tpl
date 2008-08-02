@@ -2,6 +2,10 @@ version: '2.5.2'
 selector: rich_text_editor
 simple_editor: false
 body_class: yui-skin-sam
+editor_extension_callbacks: "// MyExtension.install(editor);"
+editor_extension_javascripts:
+  # - 
+  #   extension.js
 editor_config_javascript: "
 {
   handleSubmit: true,

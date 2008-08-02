@@ -6,7 +6,7 @@ Integrate the Yahoo Rich Text Editor (http://developer.yahoo.com/yui/editor/) in
 Example
 =======
 
-# Basic config
+# Basic usage
 
 blog_controller.rb:
 
@@ -26,10 +26,22 @@ blogs.html.erb:
   <%= include_yui_editor_if_used %>
 </head>
 
-# Customized config
+# Customizing the configuration
+
+default settings are in RAILS_ROOT/config/yui_editor.yml:
+version: 2.5.1
+selector: text_editor
+
+you can override the defaults in each controller:
 
 class BlogController < ApplicationController
-  uses_yui_editor(:only => [:new, :create, :edit, :update], :selector => 'rich_text_area', :version => '2.5.1', :callbacks => 'new YuiImageUploader(editor), :editor_config_javascript => "autoHeight: true")
+  uses_yui_editor(:only => [:new, :create, :edit, :update], :selector => 'rich_text_area', :version => '2.5.1', :editor_extension_callbacks => 'new YuiImageUploader(editor);', :editor_config_javascript => "autoHeight: true")
 end
+
+Feedback
+========
+
+Send feedback and questions to:
+tastybyte at gmail.com
 
 Copyright (c) 2008 Lars Klevan, released under the MIT license

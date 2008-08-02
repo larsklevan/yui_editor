@@ -34,7 +34,7 @@ module YuiEditor
       version = options.delete(:version) || '2.5.2'
       editor_selector = options.delete(:selector) || 'rich_text_editor'
       editor_class = options.delete(:simple_editor) ? 'SimpleEditor' : 'Editor'
-      callbacks = (options.delete(:callbacks) || '')
+      callbacks = (options.delete(:editor_extension_callbacks) || '')
       body_class = options.delete(:body_class) || 'yui-skin-sam'
 
       compression = RAILS_ENV == 'development' ? '' : '-min'
@@ -46,9 +46,11 @@ module YuiEditor
       %w{element/element-beta container/container_core menu/menu button/button editor/editor-beta connection/connection}.each do |script|
         result << javascript_include_tag("//yui.yahooapis.com/#{version}/build/#{script}#{compression}.js") + "\n"
       end
+      (options[:editor_extension_javascripts] || []).each do |js|
+        result << javascript_include_tag(js) + "\n"
+      end
 
       js = <<JAVASCRIPT
-var debug = null;
 YAHOO.util.Event.onDOMReady(function(){
   new YAHOO.util.Element(document.getElementsByTagName('body')[0]).addClass('#{body_class}');
   
@@ -59,7 +61,6 @@ YAHOO.util.Event.onDOMReady(function(){
       var editor = new YAHOO.widget.#{editor_class}(textArea.id,#{options[:editor_config_javascript] || '{}'});
       #{callbacks};
       editor.render();
-      debug = editor;
     }
   }
 });
