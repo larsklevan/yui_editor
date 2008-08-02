@@ -38,6 +38,11 @@ class BlogController < ApplicationController
   uses_yui_editor(:only => [:new, :create, :edit, :update], :selector => 'rich_text_area', :version => '2.5.1', :editor_extension_callbacks => 'new YuiImageUploader(editor);', :editor_config_javascript => "autoHeight: true")
 end
 
+Installation
+============
+
+script/plugin install git://github.com/larsklevan/yui_editor.git
+
 Feedback
 ========
 
