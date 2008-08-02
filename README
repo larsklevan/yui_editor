@@ -1,0 +1,37 @@
+YuiEditor
+=========
+
+Integrate the Yahoo Rich Text Editor (http://developer.yahoo.com/yui/editor/) into a Rails application.
+
+Example
+=======
+
+# Basic config
+
+blog_controller.rb:
+
+class BlogController < ApplicationController
+  uses_yui_editor
+end
+
+new.html.erb:
+
+<% form_for(@blog) do |f| %>
+  <% f.text_area :post, :class => 'rich_text_editor' %>
+<% end %>
+
+blogs.html.erb:
+
+<head>
+  <%= include_yui_editor_if_used %>
+</head>
+
+# Customized config
+
+class BlogController < ApplicationController
+  uses_yui_editor(:only => [:new, :create, :edit, :update], :editor => {:custom_layout => :blog, :selector => 'rich_text_area', :version => '2.5.1'})
+end
+
+
+
+Copyright (c) 2008 Lars Klevan, released under the MIT license

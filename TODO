@@ -1,0 +1,5 @@
+* customize editor look with javascript
+* copy default yui_editor.yml on install
+* allow user to select yahoo hosted or locally hosted javascript
+* add callback to add extensions to the editor (like image uploader)
+* customize the body class (default: yui-skin-sam)

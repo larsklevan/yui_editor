@@ -1,0 +1,1 @@
+require 'yui_editor'
