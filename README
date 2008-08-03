@@ -28,15 +28,19 @@ blogs.html.erb:
 
 # Customizing the configuration
 
-default settings are in RAILS_ROOT/config/yui_editor.yml:
-version: 2.5.1
-selector: text_editor
+default settings are in RAILS_ROOT/config/yui_editor.yml.
 
-you can override the defaults in each controller:
+you can override the editor defaults in each controller:
 
 class BlogController < ApplicationController
-  uses_yui_editor(:only => [:new, :create, :edit, :update], :selector => 'rich_text_area', :version => '2.5.1', :editor_extension_callbacks => 'new YuiImageUploader(editor);', :editor_config_javascript => "autoHeight: true")
+  uses_yui_editor(:only => [:new, :create, :edit, :update], :selector => 'blog_post')
 end
+
+Instructions for configuring the editor:
+http://developer.yahoo.com/yui/docs/YAHOO.widget.Editor.html#configattributes
+
+Instructions for configuring the toolbar:
+http://developer.yahoo.com/yui/examples/editor/toolbar_editor.html
 
 Installation
 ============
