@@ -4,9 +4,8 @@ module YuiEditor
 
   module ClassMethods
     def uses_yui_editor(options = {})
-      yui_editor_options = options.delete(:editor)
       proc = Proc.new do |c|
-        c.instance_variable_set(:@yui_editor_options, yui_editor_options)
+        c.instance_variable_set(:@yui_editor_options, options)
         c.instance_variable_set(:@uses_yui_editor, true)
       end
       before_filter(proc, options)
