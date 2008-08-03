@@ -7,11 +7,14 @@ javascript_base_uri: //yui.yahooapis.com
 editor_extension_javascripts:
   # - extension1.js
   # - extension2.js
+additional_yui_javascripts:
+  # - connection/connection
 editor_config_javascript: "
 {
   handleSubmit: true,
   autoHeight: false,
   dompath: false,
+  collapse: true,
   toolbar: {
     collapse: true,
     titlebar: 'Text Editing Tools',

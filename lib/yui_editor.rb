@@ -36,6 +36,7 @@ module YuiEditor
       callbacks = (options.delete(:editor_extension_callbacks) || '')
       body_class = options.delete(:body_class) || 'yui-skin-sam'
       base_uri = options.delete(:javascript_base_uri) || '//yui.yahooapis.com'
+      additional_yui_javascripts = options.delete(:additional_yui_javascripts) || []
 
       compression = RAILS_ENV == 'development' ? '' : '-min'
 
@@ -43,7 +44,10 @@ module YuiEditor
       result << stylesheet_link_tag("#{base_uri}/#{version}/build/assets/skins/sam/skin.css") + "\n" if body_class == 'yui-skin-sam'
       
       result << javascript_include_tag("#{base_uri}/#{version}/build/yahoo-dom-event/yahoo-dom-event.js") + "\n"
-      %w{element/element-beta container/container_core menu/menu button/button editor/editor-beta connection/connection}.each do |script|
+      yui_scripts = %w{element/element-beta container/container_core editor/editor-beta}
+      yui_scripts << %w{menu/menu button/button} unless editor_class == 'SimpleEditor'
+      yui_scripts << additional_yui_javascripts
+      yui_scripts.each do |script|
         result << javascript_include_tag("#{base_uri}/#{version}/build/#{script}#{compression}.js") + "\n"
       end
       (options[:editor_extension_javascripts] || []).each do |js|
