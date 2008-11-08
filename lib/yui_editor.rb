@@ -30,7 +30,7 @@ module YuiEditor
     def yui_editor_init
       options = YuiEditor.default_options.merge(@yui_editor_options || {})
 
-      version = options.delete(:version) || '2.5.2'
+      version = options.delete(:version) || '2.6.0'
       editor_selector = options.delete(:selector) || 'rich_text_editor'
       editor_class = options.delete(:simple_editor) ? 'SimpleEditor' : 'Editor'
       callbacks = (options.delete(:editor_extension_callbacks) || '')
@@ -46,7 +46,7 @@ module YuiEditor
       result << javascript_include_tag("#{base_uri}/#{version}/build/yahoo-dom-event/yahoo-dom-event.js") + "\n"
       yui_scripts = %w{element/element-beta container/container_core}
       yui_scripts += %w{menu/menu button/button} unless editor_class == 'SimpleEditor'
-      yui_scripts << 'editor/editor-beta'
+      yui_scripts << 'editor/editor'
       yui_scripts += additional_yui_javascripts
       yui_scripts.each do |script|
         result << javascript_include_tag("#{base_uri}/#{version}/build/#{script}#{compression}.js") + "\n"
