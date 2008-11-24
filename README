@@ -17,7 +17,7 @@ end
 new.html.erb:
 
 <% form_for(@blog) do |f| %>
-  <% f.text_area :post, :class => 'rich_text_editor' %>
+  <%= f.text_area :post, :class => 'rich_text_editor' %>
 <% end %>
 
 blogs.html.erb:
