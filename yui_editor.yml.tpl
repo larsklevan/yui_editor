@@ -1,4 +1,4 @@
-version: '2.6.0'
+version: '2.7.0'
 selector: rich_text_editor
 simple_editor: false
 body_class: yui-skin-sam

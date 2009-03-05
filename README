@@ -36,6 +36,9 @@ class BlogController < ApplicationController
   uses_yui_editor(:only => [:new, :create, :edit, :update], :selector => 'blog_post')
 end
 
+Instructions for configuring the plugin:
+http://wiki.github.com/larsklevan/yui_editor
+
 Instructions for configuring the editor:
 http://developer.yahoo.com/yui/docs/YAHOO.widget.Editor.html#configattributes
 
@@ -53,4 +56,4 @@ Feedback
 Send feedback and questions to:
 tastybyte at gmail.com
 
-Copyright (c) 2008 Lars Klevan, released under the MIT license
+Copyright (c) 2009 Lars Klevan, released under the MIT license
