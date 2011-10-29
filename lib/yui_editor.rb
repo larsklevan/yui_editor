@@ -15,7 +15,7 @@ module YuiEditor
   def self.included(base)
     if YuiEditor.default_options.nil?
       config_file = File.join(RAILS_ROOT, 'config', 'yui_editor.yml')
-      YuiEditor.default_options = File.readable?(config_file) ? YAML.load_file(config_file).symbolize_keys : {}  
+      YuiEditor.default_options = File.readable?(config_file) ? YAML.load_file(config_file).symbolize_keys : {}
     end
 
     base.extend(ClassMethods)
@@ -42,7 +42,7 @@ module YuiEditor
 
       result = ''
       result << stylesheet_link_tag("#{base_uri}/#{version}/build/assets/skins/sam/skin.css") + "\n" if body_class == 'yui-skin-sam'
-      
+
       result << javascript_include_tag("#{base_uri}/#{version}/build/yahoo-dom-event/yahoo-dom-event.js") + "\n"
       yui_scripts = %w{element/element container/container_core}
       yui_scripts += %w{menu/menu button/button} unless editor_class == 'SimpleEditor'
@@ -58,7 +58,7 @@ module YuiEditor
       js = <<JAVASCRIPT
 YAHOO.util.Event.onDOMReady(function(){
   new YAHOO.util.Element(document.getElementsByTagName('body')[0]).addClass('#{body_class}');
-  
+
   var textAreas = document.getElementsByTagName('textarea');
   for (var i=0; i<textAreas.length; i++) {
     var textArea = textAreas[i];
@@ -70,10 +70,10 @@ YAHOO.util.Event.onDOMReady(function(){
   }
 });
 JAVASCRIPT
-#       
+#
 #       # this was adding an extra /li at the end of uls (see http://sourceforge.net/tracker/index.php?func=detail&aid=1926238&group_id=165715&atid=836476)
 #       js << "YAHOO.widget.Editor.prototype.filter_invalid_lists = function(html) { return html; };\n"
-# 
+#
       result << javascript_tag(js)
 
       result
