@@ -14,7 +14,7 @@ module YuiEditor
 
   def self.included(base)
     if YuiEditor.default_options.nil?
-      config_file = File.join(RAILS_ROOT, 'config', 'yui_editor.yml')
+      config_file = Rails.root.join('config', 'yui_editor.yml')
       YuiEditor.default_options = File.readable?(config_file) ? YAML.load_file(config_file).symbolize_keys : {}  
     end
 
@@ -38,7 +38,7 @@ module YuiEditor
       base_uri = options.delete(:javascript_base_uri) || '//yui.yahooapis.com'
       additional_yui_javascripts = options.delete(:additional_yui_javascripts) || []
 
-      compression = RAILS_ENV == 'development' ? '' : '-min'
+      compression = Rails.env == 'development' ? '' : '-min'
 
       result = ''
       result << stylesheet_link_tag("#{base_uri}/#{version}/build/assets/skins/sam/skin.css") + "\n" if body_class == 'yui-skin-sam'
@@ -76,7 +76,7 @@ JAVASCRIPT
 # 
       result << javascript_tag(js)
 
-      result
+      result.html_safe
     end
 
     def include_yui_editor_if_used
